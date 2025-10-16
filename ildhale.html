@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ildhale</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cherry+Bomb+One&display=swap');
+    body {
+      background-image: url('images/Baggrund.png');
+      background-size: cover;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    main {
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0px;
+    }
+    /* SEKTION: Ildhale fisk og taleboble */
+    #ildhale-kutling img {
+      max-width: 50%;
+      height: auto;
+      margin-top: 100px;
+      animation: flyIn 3s ease-out forwards, floating 3s ease-in-out infinite 3s;
+    }
+    #taleIldhale img {
+      max-width: 120%;
+      height: auto;
+      margin-left: -360px;
+      margin-top: -280px;
+      opacity: 0;
+      animation: bubbleAppear 1s ease-in forwards 3s, floating 3s ease-in-out infinite 3s;
+    }
+    @keyframes flyIn {
+      0% {
+        transform: translateX(-100vw);
+      }
+      100% {
+        transform: translateX(0);
+      }
+    }
+    @keyframes bubbleAppear {
+      0% {
+        opacity: 0;
+        transform: scale(0.5);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+    @keyframes floating {
+      0%, 100% {
+        transform: translateY(0px);
+      }
+      50% {
+        transform: translateY(-20px);
+      }
+    }
+    /* SEKTION: Navigationsknap */
+    #leftButtonWrapper {
+      position: fixed;
+      left: 40px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 20;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .bubble-arrow {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      outline: none;
+      padding: 10px;
+      border-radius: 50%;
+      transition: background 0.3s;
+    }
+    .bubble-arrow:hover {
+      background: rgba(255, 255, 255, 0.8);
+    }
+    .bubble-arrow svg {
+      fill: #333;
+      width: 24px;
+      height: 24px;
+      transition: transform 0.3s;
+    }
+    .bubble-arrow:hover svg {
+      transform: translateX(-5px);
+    }
+    </style>
+</head>
+<body>
+  <main>
+    <!-- SEKTION: Ildhale fisk -->
+    <div id="ildhale-kutling">
+      <img src="images/ildhaleNanna.png" alt="ildhale">
+    </div>
+    <!-- SEKTION: Taleboble -->
+    <div id="taleIldhale">
+      <img src="images/taleIldhale.png" alt="taleIldhale">
+    </div>
+  </main>
+  <!-- SEKTION: Navigationsknap -->
+  <div id="leftButtonWrapper">
+    <a href="allefisk.html">
+      <button class="bubble-arrow" aria-label="Tilbage">
+        <svg viewBox="0 0 24 24" style="transform: scaleX(-1)"><path d="M8 5l8 7-8 7"/></svg>
+      </button>
+    </a>
+  </div>
+  <!-- SEKTION: Bobler og flydende fisk -->
+  <script>
+      // Funktion til at animere bobler (samme beskrivelse som i allefisk.html)
+      function animateBubble(bubble) {
+        const w = document.documentElement.clientWidth;
+        const h = document.documentElement.clientHeight;
+        function floatOnce() {
+          // Tilfældig startposition vandret
+          const startX = Math.random() * (w - 60);
+          // Tilfældig varighed 7-14 sekunder
+          const duration = 7000 + Math.random() * 7000;
+          // Tilfældig skalering for variation
+          const scale = 0.7 + Math.random() * 0.6;
+          bubble.style.left = startX + 'px';
+          bubble.style.bottom = '-120px';
+          bubble.style.opacity = 0.7;
+          bubble.style.transform = `scaleY(-1) scale(${scale})`;
+          bubble.style.transition = 'none';
+          // Force reflow for transition
+          void bubble.offsetWidth;
+          // Animer til top
+          setTimeout(() => {
+            bubble.style.transition = `bottom ${duration}ms linear, opacity 1s linear`;
+            bubble.style.bottom = h + 120 + 'px';
+            bubble.style.opacity = 0.2;
+          }, 20);
+          // Når færdig, start forfra
+          setTimeout(floatOnce, duration + 2500);
+        }
+        floatOnce();
+      }
+      // Funktion til at animere flydende fisk (samme beskrivelse som i allefisk.html)
+      function animateFloatFish(fish) {
+        const w = document.documentElement.clientWidth;
+        const h = document.documentElement.clientHeight;
+        function floatOnce() {
+          // Tilfældig startposition lodret
+          const startY = Math.random() * (h - 40);
+          // Tilfældig varighed 18-30 sekunder
+          const duration = 18000 + Math.random() * 12000;
+          fish.style.top = startY + 'px';
+          fish.style.left = w + 'px';
+          fish.style.transition = 'none';
+          // Force reflow
+          void fish.offsetWidth;
+          // Animer til venstre
+          setTimeout(() => {
+            fish.style.transition = `left ${duration}ms linear`;
+            fish.style.left = '-60px';
+          }, 20);
+          // Når færdig, start forfra efter pause
+          setTimeout(floatOnce, duration + 4000);
+        }
+        floatOnce();
+      }
+      document.addEventListener('DOMContentLoaded', function() {
+        // Tilføj flere bobler
+        for (let i = 0; i < 7; i++) {
+          const b = document.createElement('img');
+          b.src = 'images/floatbobbler.png';
+          b.className = 'bubble';
+          b.alt = 'Bobler';
+          document.body.appendChild(b);
+          // Offset hver bobles wobble-animation
+          b.style.animationDelay = (Math.random() * 4) + 's';
+          setTimeout(() => animateBubble(b), i * 2200 + Math.random()*1200);
+        }
+        // Animer alle flydende fisk
+        for (let i = 1; i <= 6; i++) {
+          setTimeout(() => animateFloatFish(document.getElementById('flydefisk' + i)), i * 3000);
+        }
+      });
+    </script>
+</body>
+</html>

@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alle fisk</title>
+
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Cherry+Bomb+One&display=swap');
+    </style>
+</head>
+<body style="background-image: url('images/Baggrund.png'); background-size: cover;">
+
+    <!-- SEKTION: Navigation og fiskebilleder -->
+    <!-- Klik på en fisk for at se mere information -->
+    <a href="anthias.html" class="fish-link"><img class="fish" id="anthias" src="images/anthias.png" alt="Anthias"></a>
+    <a href="dvaergkejser.html" class="fish-link"><img class="fish" id="dvaergkejser" src="images/dvaergkejser.png" alt="Dværgkejser"></a>
+    <a href="ildhale.html" class="fish-link"><img class="fish" id="ildhale" src="images/ildhale.png" alt="Ildhale"></a>
+    <a href="nemo.html" class="fish-link"><img class="fish" id="nemo" src="images/nemo.png" alt="Nemo"></a>
+    <a href="palet.html" class="fish-link"><img class="fish" id="palet" src="images/palet.png" alt="Palet"></a>
+    <a href="sejlfinnet.html" class="fish-link"><img class="fish" id="sejlfinnet" src="images/sejlfinnet.png" alt="Sejlfinnet"></a>
+
+    <!-- SEKTION: Bobler og flydende fisk -->
+    <img class="bubble" src="images/floatbobbler.png" alt="Bobler">
+    <img class="float-fish" id="flydefisk1" src="images/flydefisk01.png" alt="Flydefisk 1">
+    <img class="float-fish" id="flydefisk2" src="images/flydefisk02.png" alt="Flydefisk 2">
+    <img class="float-fish" id="flydefisk3" src="images/flydefisk01.png" alt="Flydefisk 3">
+    <img class="float-fish" id="flydefisk4" src="images/flydefisk02.png" alt="Flydefisk 4">
+    <img class="float-fish" id="flydefisk5" src="images/flydefisk01.png" alt="Flydefisk 5">
+    <img class="float-fish" id="flydefisk6" src="images/flydefisk02.png" alt="Flydefisk 6">
+
+    <!-- SEKTION: CSS til fisk, bobler og flydende fisk -->
+    <style>
+      /* Fiskestil */
+      .fish {
+        position: absolute;
+        width: 100px;
+        height: auto;
+        z-index: 5;
+        transition: left 6s linear, top 6s linear, transform 1.2s cubic-bezier(.68,-0.55,.27,1.55);
+      }
+      .fish.swim-out {
+        transition: left 1.2s cubic-bezier(.68,-0.55,.27,1.55), top 1.2s cubic-bezier(.68,-0.55,.27,1.55), transform 1.2s cubic-bezier(.68,-0.55,.27,1.55);
+        left: 120vw !important;
+        opacity: 0.2;
+      }
+      /* Boble-stil */
+      .bubble {
+        position: absolute;
+        left: 0;
+        bottom: -120px;
+        width: 60px;
+        height: auto;
+        opacity: 0.7;
+        pointer-events: none;
+        z-index: 2;
+        transition: none;
+        transform: scaleY(-1);
+        animation: bubbleWobble 4.5s infinite ease-in-out;
+      }
+      /* Små fisk der svømmer på tværs */
+      .small-fish {
+        position: absolute;
+        width: 60px;
+        height: auto;
+        top: 20%;
+        left: -80px;
+        z-index: 3;
+        opacity: 0.85;
+        pointer-events: none;
+        animation: swimAcross 14s linear infinite;
+      }
+      #smallfish2 {
+        top: 65%;
+        animation-delay: 7s;
+        animation-duration: 18s;
+        transform: scaleX(-1);
+      }
+      /* Flydende fisk */
+      .float-fish {
+        position: absolute;
+        width: 38px;
+        height: auto;
+        top: 0;
+        left: 100vw;
+        z-index: 4;
+        opacity: 0.85;
+        pointer-events: none;
+        transition: none;
+      }
+      /* Boble-animation */
+      @keyframes bubbleWobble {
+        0%   { transform: scaleY(-1) translateX(0); }
+        10%  { transform: scaleY(-1) translateX(-6px); }
+        20%  { transform: scaleY(-1) translateX(6px); }
+        30%  { transform: scaleY(-1) translateX(-8px); }
+        40%  { transform: scaleY(-1) translateX(8px); }
+        50%  { transform: scaleY(-1) translateX(-10px); }
+        60%  { transform: scaleY(-1) translateX(10px); }
+        70%  { transform: scaleY(-1) translateX(-7px); }
+        80%  { transform: scaleY(-1) translateX(7px); }
+        90%  { transform: scaleY(-1) translateX(-3px); }
+        100% { transform: scaleY(-1) translateX(0); }
+      }
+      /* Lille fisk svømmer-animation */
+      @keyframes swimAcross {
+        0% {
+          left: -80px;
+        }
+        100% {
+          left: 100vw;
+        }
+      }
+    </style>
+    <script>
+      // Parameters for each fish's path
+      const fishPaths = [];
+      function setupFishPaths(fishes) {
+        const w = document.documentElement.clientWidth;
+        const h = document.documentElement.clientHeight;
+        fishes.forEach((fish, i) => {
+          // Random ellipse center and radii, unique speed and phase
+          const cx = w/2 + (Math.random()-0.5)*w*0.4;
+          const cy = h/2 + (Math.random()-0.5)*h*0.4;
+          const rx = w*0.35*(0.7+Math.random()*0.3);
+          const ry = h*0.35*(0.7+Math.random()*0.3);
+          const speed = 0.15 + Math.random()*0.07; // radians per second
+          const phase = Math.random()*Math.PI*2;
+          fishPaths.push({cx, cy, rx, ry, speed, phase, fish});
+        });
+      }
+      function animateFishPaths(startTime) {
+        function frame(now) {
+          const t = (now - startTime)/1000;
+          fishPaths.forEach((p, i) => {
+            const angle = p.phase + t * p.speed;
+            const x = p.cx + p.rx * Math.cos(angle);
+            const y = p.cy + p.ry * Math.sin(angle);
+            p.fish.style.left = (x - p.fish.offsetWidth/2) + 'px';
+            p.fish.style.top = (y - p.fish.offsetHeight/2) + 'px';
+            // Flip fish horizontally if moving left
+            const prevAngle = angle - 0.01; // small step back
+            const prevX = p.cx + p.rx * Math.cos(prevAngle);
+            if (x < prevX) {
+              p.fish.style.transform = 'scaleX(-1)';
+            } else {
+              p.fish.style.transform = 'scaleX(1)';
+            }
+          });
+          requestAnimationFrame(frame);
+        }
+        requestAnimationFrame(frame);
+      }
+      function animateBubble(bubble) {
+        const w = document.documentElement.clientWidth;
+        const h = document.documentElement.clientHeight;
+        function floatOnce() {
+          // Random horizontal start position
+          const startX = Math.random() * (w - 60);
+          // Random duration between 7-14s (slower)
+          const duration = 7000 + Math.random() * 7000;
+          // Random scale for variety
+          const scale = 0.7 + Math.random() * 0.6;
+          bubble.style.left = startX + 'px';
+          bubble.style.bottom = '-120px';
+          bubble.style.opacity = 0.7;
+          bubble.style.transform = `scaleY(-1) scale(${scale})`;
+          bubble.style.transition = 'none';
+          // Force reflow for transition
+          void bubble.offsetWidth;
+          // Animate to top
+          setTimeout(() => {
+            bubble.style.transition = `bottom ${duration}ms linear, opacity 1s linear`;
+            bubble.style.bottom = h + 120 + 'px';
+            bubble.style.opacity = 0.2;
+          }, 20);
+          // When done, restart
+          setTimeout(floatOnce, duration + 2500);
+        }
+        floatOnce();
+      }
+      function animateFloatFish(fish) {
+        const w = document.documentElement.clientWidth;
+        const h = document.documentElement.clientHeight;
+        function floatOnce() {
+          // Random vertical start position
+          const startY = Math.random() * (h - 40);
+          // Random duration between 12-22s (slower, less frequent)
+          const duration = 18000 + Math.random() * 12000;
+          fish.style.top = startY + 'px';
+          fish.style.left = w + 'px';
+          fish.style.transition = 'none';
+          // Force reflow
+          void fish.offsetWidth;
+          // Animate to left
+          setTimeout(() => {
+            fish.style.transition = `left ${duration}ms linear`;
+            fish.style.left = '-60px';
+          }, 20);
+          // When done, restart after a longer pause
+          setTimeout(floatOnce, duration + 4000);
+        }
+        floatOnce();
+      }
+      document.addEventListener('DOMContentLoaded', function() {
+        var fishes = Array.from(document.querySelectorAll('.fish'));
+        fishes.forEach(fish => {
+          fish.style.position = 'absolute';
+        });
+        setupFishPaths(fishes);
+        animateFishPaths(performance.now());
+        // Add multiple bubbles
+        for (let i = 0; i < 7; i++) {
+          const b = document.createElement('img');
+          b.src = 'images/floatbobbler.png';
+          b.className = 'bubble';
+          b.alt = 'Bubbles';
+          document.body.appendChild(b);
+          // Offset each bubble's wobble animation
+          b.style.animationDelay = (Math.random() * 4) + 's';
+          setTimeout(() => animateBubble(b), i * 2200 + Math.random()*1200);
+        }
+        // Animate all floating fish
+        for (let i = 1; i <= 6; i++) {
+          setTimeout(() => animateFloatFish(document.getElementById('flydefisk' + i)), i * 3000);
+        }
+        // Play bubble sound and animate fish out on click
+        var bubbleSound = document.getElementById('bubbleSound');
+        document.querySelectorAll('.fish-link').forEach(link => {
+          link.addEventListener('click', function(e) {
+            e.preventDefault();
+            if (bubbleSound) {
+              bubbleSound.currentTime = 0;
+              bubbleSound.play();
+            }
+            // Animate all big fish out
+            var fishes = document.querySelectorAll('.fish');
+            fishes.forEach(fish => {
+              fish.classList.add('swim-out');
+            });
+            // Wait for animation, then go to link
+            setTimeout(() => {
+              window.location.href = link.getAttribute('href');
+            }, 1200);
+          });
+        });
+      });
+    </script>
+    <audio id="bubbleSound" src="soundeffect/bubbles.wav" preload="auto"></audio>
+
+<div id="leftButtonWrapper">
+      <a href="havfrue.html">
+        <button class="bubble-arrow" aria-label="Tilbage">
+          <svg viewBox="0 0 24 24" style="transform: scaleX(-1)"><path d="M8 5l8 7-8 7"/></svg>
+        </button>
+      </a>
+    </div>
+    <style>
+      #leftButtonWrapper {
+      position: fixed;
+      left: 40px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 20;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .bubble-arrow {
+      background: none;
+      border: none;
+      cursor: pointer;
+      outline: none;
+      padding: 10px;
+      border-radius: 50%;
+      transition: transform 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    .bubble-arrow:hover {
+      transform: translateY(-2px);
+    }
+    .bubble-arrow:active {
+      transform: translateY(1px);
+    }
+    </style>
+</div>
+</body>
+</html>

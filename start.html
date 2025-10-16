@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Start</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cherry+Bomb+One&display=swap');
+    body {
+      background-image: url('images/Baggrund.png');
+      background-size: cover;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      width: 100vw;
+      height: 100vh;
+    }
+    </style>
+</head>
+<body>
+    <!-- SEKTION: Bobler og flydende fisk -->
+    <script>
+      // Funktion til at animere bobler (samme beskrivelse som i allefisk.html)
+      function animateBubble(bubble) {
+        const w = document.documentElement.clientWidth;
+        const h = document.documentElement.clientHeight;
+        function floatOnce() {
+          // Tilfældig startposition vandret
+          const startX = Math.random() * (w - 60);
+          // Tilfældig varighed 7-14 sekunder
+          const duration = 7000 + Math.random() * 7000;
+          // Tilfældig skalering for variation
+          const scale = 0.7 + Math.random() * 0.6;
+          bubble.style.left = startX + 'px';
+          bubble.style.bottom = '-120px';
+          bubble.style.opacity = 0.7;
+          bubble.style.transform = `scaleY(-1) scale(${scale})`;
+          bubble.style.transition = 'none';
+          // Force reflow for transition
+          void bubble.offsetWidth;
+          // Animer til top
+          setTimeout(() => {
+            bubble.style.transition = `bottom ${duration}ms linear, opacity 1s linear`;
+            bubble.style.bottom = h + 120 + 'px';
+            bubble.style.opacity = 0.2;
+          }, 20);
+          // Når færdig, start forfra
+          setTimeout(floatOnce, duration + 2500);
+        }
+        floatOnce();
+      }
+      // Funktion til at animere flydende fisk (samme beskrivelse som i allefisk.html)
+      function animateFloatFish(fish) {
+        const w = document.documentElement.clientWidth;
+        const h = document.documentElement.clientHeight;
+        function floatOnce() {
+          // Tilfældig startposition lodret
+          const startY = Math.random() * (h - 40);
+          // Tilfældig varighed 18-30 sekunder
+          const duration = 18000 + Math.random() * 12000;
+          fish.style.top = startY + 'px';
+          fish.style.left = w + 'px';
+          fish.style.transition = 'none';
+          // Force reflow
+          void fish.offsetWidth;
+          // Animer til venstre
+          setTimeout(() => {
+            fish.style.transition = `left ${duration}ms linear`;
+            fish.style.left = '-60px';
+          }, 20);
+          // Når færdig, start forfra efter pause
+          setTimeout(floatOnce, duration + 4000);
+        }
+        floatOnce();
+      }
+      document.addEventListener('DOMContentLoaded', function() {
+        // Tilføj flere bobler
+        for (let i = 0; i < 7; i++) {
+          const b = document.createElement('img');
+          b.src = 'images/floatbobbler.png';
+          b.className = 'bubble';
+          b.alt = 'Bobler';
+          document.body.appendChild(b);
+          // Offset hver bobles wobble-animation
+          b.style.animationDelay = (Math.random() * 4) + 's';
+          setTimeout(() => animateBubble(b), i * 2200 + Math.random()*1200);
+        }
+        // Animer alle flydende fisk
+        for (let i = 1; i <= 6; i++) {
+          setTimeout(() => animateFloatFish(document.getElementById('flydefisk' + i)), i * 3000);
+        }
+      });
+    </script>
+    <style>
+      /* Boble-stil */
+      .bubble {
+        position: absolute;
+        left: 0;
+        bottom: -120px;
+        width: 60px;
+        height: auto;
+        opacity: 0.7;
+        pointer-events: none;
+        z-index: 2;
+        transition: none;
+        transform: scaleY(-1);
+        animation: bubbleWobble 4.5s infinite ease-in-out;
+      }
+      /* Boble-animation */
+      @keyframes bubbleWobble {
+        0%   { transform: scaleY(-1) translateX(0); }
+        10%  { transform: scaleY(-1) translateX(-6px); }
+        20%  { transform: scaleY(-1) translateX(6px); }
+        30%  { transform: scaleY(-1) translateX(-8px); }
+        40%  { transform: scaleY(-1) translateX(8px); }
+        50%  { transform: scaleY(-1) translateX(-10px); }
+        60%  { transform: scaleY(-1) translateX(10px); }
+        70%  { transform: scaleY(-1) translateX(-7px); }
+        80%  { transform: scaleY(-1) translateX(7px); }
+        90%  { transform: scaleY(-1) translateX(-3px); }
+        100% { transform: scaleY(-1) translateX(0); }
+      }
+    </style>
+    <!-- SEKTION: Flydende fisk -->
+    <img class="float-fish" id="flydefisk1" src="images/flydefisk01.png" alt="Flydefisk 1">
+    <img class="float-fish" id="flydefisk2" src="images/flydefisk02.png" alt="Flydefisk 2">
+    <img class="float-fish" id="flydefisk3" src="images/flydefisk01.png" alt="Flydefisk 3">
+    <img class="float-fish" id="flydefisk4" src="images/flydefisk02.png" alt="Flydefisk 4">
+    <img class="float-fish" id="flydefisk5" src="images/flydefisk01.png" alt="Flydefisk 5">
+    <img class="float-fish" id="flydefisk6" src="images/flydefisk02.png" alt="Flydefisk 6">
+    <style>
+      /* Flydende fisk stil */
+      .float-fish {
+        position: absolute;
+        width: 38px;
+        height: auto;
+        top: 0;
+        left: 100vw;
+        z-index: 4;
+        opacity: 0.85;
+        pointer-events: none;
+        transition: none;
+      }
+    </style>
+    <!-- SEKTION: Startknap og titel -->
+    <div style="position: absolute; top: 30%; left: 50%; transform: translate(-50%, -50%); text-align: center; z-index: 10;">
+        <h1 style="font-family: 'Cherry Bomb One', cursive; color: #fff; font-size: 3.2rem; text-shadow: 2px 2px 8px #000;">Velkommen til Akvariet!</h1>
+        <a href="allefisk.html" style="display: inline-block; margin-top: 2.5rem; padding: 1.2rem 3.2rem; font-size: 2.1rem; background: #1e90ff; color: #fff; border-radius: 2.5rem; text-decoration: none; font-family: 'Cherry Bomb One', cursive; box-shadow: 0 4px 16px #0008; transition: background 0.2s;">Start</a>
+    </div>
+</body>
+</html>

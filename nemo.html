@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEMO fisk</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cherry+Bomb+One&display=swap');
+    body {
+      background-image: url('images/Baggrund.png');
+      background-size: cover;
+      margin:0;
+      padding:0;
+      box-sizing: border-box;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    main {
+      text-align: center;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 500px;
+      width: 100vw;
+      gap: 0px;
+    }
+    /* SEKTION: Nemo fisk og taleboble */
+    #nemoFisk img {
+      max-width: 100%;
+      height: auto;
+      animation: swimIn 3s ease-out 1, floating 3s ease-in-out infinite 3s;
+      margin: 0;
+    }
+    #nemoBobbel {
+      position: relative;
+      margin-top: -400px;
+      margin-left: -30px;
+      opacity: 0;
+      animation: bubbleAppear 3s ease-in forwards 3s;
+    }
+    #nemoBobbel img {
+      max-width: 400px;
+      height: auto;
+      margin: 0;
+      animation: floating 3s ease-in-out infinite 3s;
+    }
+    @keyframes swimIn {
+      0% {
+        transform: translateX(-100vw);
+      }
+      100% {
+        transform: translateX(0);
+      }
+    }
+    @keyframes bubbleAppear {
+      0% {
+        opacity: 0;
+        transform: translateY(0.5);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+    @keyframes floating {
+      0%, 100% {
+        transform: translateY(0px);
+      }
+      50% {
+        transform: translateY(-20px);
+      }
+    }
+    /* SEKTION: Navigationsknap */
+    #leftButtonWrapper {
+      position: fixed;
+      left: 40px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 20;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .bubble-arrow {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      outline: none;
+      padding: 10px;
+      border-radius: 50%;
+      transition: background 0.3s;
+    }
+    .bubble-arrow:hover {
+      background: rgba(255, 255, 255, 0.8);
+    }
+    .bubble-arrow svg {
+      fill: #333;
+      width: 24px;
+      height: 24px;
+      transition: transform 0.3s;
+    }
+    .bubble-arrow:hover svg {
+      transform: translateX(-5px);
+    }
+    /* SEKTION: Bobler (animerede) */
+    .bubble {
+      position: absolute;
+      left: 0;
+      bottom: -120px;
+      width: 60px;
+      height: auto;
+      opacity: 0.7;
+      pointer-events: none;
+      z-index: 2;
+      transition: none;
+      transform: scaleY(-1);
+      animation: bubbleWobble 4.5s infinite ease-in-out;
+    }
+    @keyframes bubbleWobble {
+      0%   { transform: scaleY(-1) translateX(0); }
+      10%  { transform: scaleY(-1) translateX(-6px); }
+      20%  { transform: scaleY(-1) translateX(6px); }
+      30%  { transform: scaleY(-1) translateX(-8px); }
+      40%  { transform: scaleY(-1) translateX(8px); }
+      50%  { transform: scaleY(-1) translateX(-10px); }
+      60%  { transform: scaleY(-1) translateX(10px); }
+      70%  { transform: scaleY(-1) translateX(-7px); }
+      80%  { transform: scaleY(-1) translateX(7px); }
+      90%  { transform: scaleY(-1) translateX(-3px); }
+      100% { transform: scaleY(-1) translateX(0); }
+    }
+    /* SEKTION: Flydende fisk stil */
+    .float-fish {
+      position: absolute;
+      width: 38px;
+      height: auto;
+      top: 0;
+      left: 100vw;
+      z-index: 4;
+      opacity: 0.85;
+      pointer-events: none;
+      transition: none;
+    }
+    </style>
+</head>
+<body>
+    <main>
+      <!-- SEKTION: Nemo fisk -->
+      <div id="nemoFisk>
+        <img src="Images/nemoFisk.png" alt="Nemo fisk" class="nemoFisk">
+      </div>
+      <!-- SEKTION: Taleboble -->
+      <div id="nemoBobbel">
+        <img src="Images/nemoBobbel.png" alt="Nemo bobbel" class="nemoBobbel">
+      </div>
+    </main>
+    <!-- SEKTION: Navigationsknap -->
+    <div id="leftButtonWrapper">
+      <a href="allefisk.html">
+        <button class="bubble-arrow" aria-label="Tilbage">
+          <svg viewBox="0 0 24 24" style="transform: scaleX(-1)"><path d="M8 5l8 7-8 7"/></svg>
+        </button>
+      </a>
+    </div>
+    <!-- SEKTION: Bobler og flydende fisk -->
+    <script>
+      // Funktion til at animere bobler (samme beskrivelse som i allefisk.html)
+      function animateBubble(bubble) {
+        const w = document.documentElement.clientWidth;
+        const h = document.documentElement.clientHeight;
+        function floatOnce() {
+          // Tilfældig startposition vandret
+          const startX = Math.random() * (w - 60);
+          // Tilfældig varighed 7-14 sekunder
+          const duration = 7000 + Math.random() * 7000;
+          // Tilfældig skalering for variation
+          const scale = 0.7 + Math.random() * 0.6;
+          bubble.style.left = startX + 'px';
+          bubble.style.bottom = '-120px';
+          bubble.style.opacity = 0.7;
+          bubble.style.transform = `scaleY(-1) scale(${scale})`;
+          bubble.style.transition = 'none';
+          // Force reflow for transition
+          void bubble.offsetWidth;
+          // Animer til top
+          setTimeout(() => {
+            bubble.style.transition = `bottom ${duration}ms linear, opacity 1s linear`;
+            bubble.style.bottom = h + 120 + 'px';
+            bubble.style.opacity = 0.2;
+          }, 20);
+          // Når færdig, start forfra
+          setTimeout(floatOnce, duration + 2500);
+        }
+        floatOnce();
+      }
+      // Funktion til at animere flydende fisk (samme beskrivelse som i allefisk.html)
+      function animateFloatFish(fish) {
+        const w = document.documentElement.clientWidth;
+        const h = document.documentElement.clientHeight;
+        function floatOnce() {
+          // Tilfældig startposition lodret
+          const startY = Math.random() * (h - 40);
+          // Tilfældig varighed 18-30 sekunder
+          const duration = 18000 + Math.random() * 12000;
+          fish.style.top = startY + 'px';
+          fish.style.left = w + 'px';
+          fish.style.transition = 'none';
+          // Force reflow
+          void fish.offsetWidth;
+          // Animer til venstre
+          setTimeout(() => {
+            fish.style.transition = `left ${duration}ms linear`;
+            fish.style.left = '-60px';
+          }, 20);
+          // Når færdig, start forfra efter pause
+          setTimeout(floatOnce, duration + 4000);
+        }
+        floatOnce();
+      }
+      document.addEventListener('DOMContentLoaded', function() {
+        // Tilføj flere bobler
+        for (let i = 0; i < 7; i++) {
+          const b = document.createElement('img');
+          b.src = 'images/floatbobbler.png';
+          b.className = 'bubble';
+          b.alt = 'Bobler';
+          document.body.appendChild(b);
+          // Offset hver bobles wobble-animation
+          b.style.animationDelay = (Math.random() * 4) + 's';
+          setTimeout(() => animateBubble(b), i * 2200 + Math.random()*1200);
+        }
+        // Animer alle flydende fisk
+        for (let i = 1; i <= 6; i++) {
+          setTimeout(() => animateFloatFish(document.getElementById('flydefisk' + i)), i * 3000);
+        }
+      });
+    </script>
+    <!-- SEKTION: Flydende fisk -->
+    <img class="float-fish" id="flydefisk1" src="images/flydefisk01.png" alt="Flydefisk 1">
+    <img class="float-fish" id="flydefisk2" src="images/flydefisk02.png" alt="Flydefisk 2">
+    <img class="float-fish" id="flydefisk3" src="images/flydefisk01.png" alt="Flydefisk 3">
+    <img class="float-fish" id="flydefisk4" src="images/flydefisk02.png" alt="Flydefisk 4">
+    <img class="float-fish" id="flydefisk5" src="images/flydefisk01.png" alt="Flydefisk 5">
+    <img class="float-fish" id="flydefisk6" src="images/flydefisk02.png" alt="Flydefisk 6">
+</body>
+</html>
