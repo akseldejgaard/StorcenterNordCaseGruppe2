@@ -1,15 +1,25 @@
 <!DOCTYPE html>
-<html lang="da">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Havfrue</title>
     <link rel="stylesheet" href="css/style.css">
     <style>
-    @import url('https://fonts.googleapis.com/css2?family=Cherry+Bomb+One&display=swap');
-    .hidden { opacity: 0; transition: opacity 0.4s; }
-    #havfruetale:not(.hidden) { opacity: 1; transition: opacity 0.4s; }
-    #rightButtonWrapper {
+        
+@import url('https://fonts.googleapis.com/css2?family=Cherry+Bomb+One&display=swap');
+
+#havfrue {
+  position: static;
+  width: 150px;
+  height: auto;
+  z-index: 3;
+  opacity: 1;
+  transform: none !important;
+}
+.hidden { opacity: 0; transition: opacity 0.4s; }
+#havfruetale:not(.hidden) { opacity: 1; transition: opacity 0.4s; }
+#rightButtonWrapper {
       position: fixed;
       right: 40px;
       top: 50%;
@@ -21,95 +31,103 @@
     }
     </style>
 </head>
-<body style="background-image: url('images/Baggrund.png'); background-size: cover;">
-    <!-- SEKTION: Tale-bobbel -->
-    <div id="havfruetale" class="hidden">
-      <p id="tale1">Hej med dig! Velkommen til havets dyb</p>
-      <p id="tale2" style="display:none;">Kom og se mine venner i akvariet! Tryk på pilen</p>
-    </div>
-    <!-- SEKTION: Navigationsknap -->
-    <div id="rightButtonWrapper">
-      <a href="allefisk.html">
-        <button class="bubble-arrow" aria-label="Næste">
-          <svg viewBox="0 0 24 24"><path d="M8 5l8 7-8 7"/></svg>
+<body style="background-image: url('images/Baggrund.png'); 
+background-size: cover;">
+
+  <img src="images/Krappe.gif" alt="Krappe" style="position: fixed; right: 160px; bottom: 50px; width: 100px; z-index: 50; pointer-events: none;">
+
+    <div style="position: fixed; top: 20px; left: 20px; z-index: 100;">
+      <a href="start.html">
+        <button class="bubble-arrow" aria-label="Home">
+          <svg viewBox="0 0 24 24" style="transform: scaleX(-1);"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
         </button>
       </a>
     </div>
-    <!-- SEKTION: Bobler og flydende fisk -->
+    
+  <img id="havfrue" src="images/havfrue.png" alt="Havfrue">
+  <audio id="page-audio" src="soundeffect/havfruelyd.mp3"></audio>
+  <div id="audio-overlay" style="position:fixed;top:32px;left:50%;transform:translateX(-50%);z-index:9999;display:flex;align-items:center;justify-content:center;">
+    <span style="display:inline-flex;justify-content:center;align-items:center;width:60px;height:60px;border-radius:50%;background:radial-gradient(circle at 30% 30%, #b3eaff 70%, #6CC8E1 100%);box-shadow:0 4px 16px rgba(108,200,225,0.25),0 1px 4px #285C6E33;border:2px solid #6CC8E1;cursor:pointer;transition:box-shadow 0.2s,transform 0.2s;position:relative;font-size:1.1rem;color:#285C6E;font-family:'Cherry Bomb One',cursive;text-align:center;">
+      <span style="position:relative;z-index:2;">🔊</span>
+      <span style="position:absolute;top:110%;left:50%;transform:translateX(-50%);background:#b3eaff;border-radius:16px;padding:6px 18px;font-size:1.1rem;color:#285C6E;box-shadow:0 2px 8px rgba(108,200,225,0.18);border:1.5px solid #6CC8E1;white-space:nowrap;">Tryk for lyd</span>
+    </span>
+  </div>
+  <script>
+    window.addEventListener('DOMContentLoaded', function() {
+      var overlay = document.getElementById('audio-overlay');
+      var audio = document.getElementById('page-audio');
+      function playAudio() {
+        if (audio) audio.play();
+        if (overlay) overlay.style.display = 'none';
+        window.removeEventListener('click', playAudio);
+        window.removeEventListener('touchstart', playAudio);
+      }
+      window.addEventListener('click', playAudio);
+      window.addEventListener('touchstart', playAudio);
+    });
+  </script>
+
+  <div id="havfruetale" class="hidden">
+    <p id="tale1">Hej med dig! Velkommen til havets dyb</p>
+    <p id="tale2" style="display:none;">Kom og se mine venner i akvariet! Tryk på pilen</p>
+  </div>
+
+  <div id="rightButtonWrapper">
+    <a href="allefisk.html">
+      <button class="bubble-arrow" aria-label="Next">
+        <svg viewBox="0 0 24 24"><path d="M8 5l8 7-8 7"/></svg>
+      </button>
+    </a>
+  </div>
+  
+<!-- Floating bubbles -->
     <script>
-      // Funktion til at animere bobler (samme beskrivelse som i allefisk.html)
       function animateBubble(bubble) {
         const w = document.documentElement.clientWidth;
         const h = document.documentElement.clientHeight;
         function floatOnce() {
-          // Tilfældig startposition vandret
           const startX = Math.random() * (w - 60);
-          // Tilfældig varighed 7-14 sekunder
           const duration = 7000 + Math.random() * 7000;
-          // Tilfældig skalering for variation
           const scale = 0.7 + Math.random() * 0.6;
+          const amplitude = 30 + Math.random() * 30;
+          const frequency = 1.5 + Math.random();
+          const phase = Math.random() * Math.PI * 2;
           bubble.style.left = startX + 'px';
           bubble.style.bottom = '-120px';
           bubble.style.opacity = 0.7;
           bubble.style.transform = `scaleY(-1) scale(${scale})`;
           bubble.style.transition = 'none';
-          // Force reflow for transition
-          void bubble.offsetWidth;
-          // Animer til top
-          setTimeout(() => {
-            bubble.style.transition = `bottom ${duration}ms linear, opacity 1s linear`;
-            bubble.style.bottom = h + 120 + 'px';
-            bubble.style.opacity = 0.2;
-          }, 20);
-          // Når færdig, start forfra
-          setTimeout(floatOnce, duration + 2500);
-        }
-        floatOnce();
-      }
-      // Funktion til at animere flydende fisk (samme beskrivelse som i allefisk.html)
-      function animateFloatFish(fish) {
-        const w = document.documentElement.clientWidth;
-        const h = document.documentElement.clientHeight;
-        function floatOnce() {
-          // Tilfældig startposition lodret
-          const startY = Math.random() * (h - 40);
-          // Tilfældig varighed 18-30 sekunder
-          const duration = 18000 + Math.random() * 12000;
-          fish.style.top = startY + 'px';
-          fish.style.left = w + 'px';
-          fish.style.transition = 'none';
-          // Force reflow
-          void fish.offsetWidth;
-          // Animer til venstre
-          setTimeout(() => {
-            fish.style.transition = `left ${duration}ms linear`;
-            fish.style.left = '-60px';
-          }, 20);
-          // Når færdig, start forfra efter pause
-          setTimeout(floatOnce, duration + 4000);
+          let startTime = null;
+          function animateStep(ts) {
+            if (!startTime) startTime = ts;
+            let elapsed = ts - startTime;
+            let progress = Math.min(elapsed / duration, 1);
+            let y = -120 + (h + 240) * progress;
+            let x = startX + Math.sin(progress * Math.PI * 2 * frequency + phase) * amplitude;
+            bubble.style.left = x + 'px';
+            bubble.style.bottom = y + 'px';
+            if (progress < 1) {
+              requestAnimationFrame(animateStep);
+            } else {
+              setTimeout(floatOnce, 2500);
+            }
+          }
+          requestAnimationFrame(animateStep);
         }
         floatOnce();
       }
       document.addEventListener('DOMContentLoaded', function() {
-        // Tilføj flere bobler
         for (let i = 0; i < 7; i++) {
           const b = document.createElement('img');
           b.src = 'images/floatbobbler.png';
           b.className = 'bubble';
-          b.alt = 'Bobler';
+          b.alt = 'Bubbles';
           document.body.appendChild(b);
-          // Offset hver bobles wobble-animation
-          b.style.animationDelay = (Math.random() * 4) + 's';
           setTimeout(() => animateBubble(b), i * 2200 + Math.random()*1200);
-        }
-        // Animer alle flydende fisk
-        for (let i = 1; i <= 6; i++) {
-          setTimeout(() => animateFloatFish(document.getElementById('flydefisk' + i)), i * 3000);
         }
       });
     </script>
     <style>
-      /* Boble-stil */
       .bubble {
         position: absolute;
         left: 0;
@@ -123,7 +141,6 @@
         transform: scaleY(-1);
         animation: bubbleWobble 4.5s infinite ease-in-out;
       }
-      /* Boble-animation */
       @keyframes bubbleWobble {
         0%   { transform: scaleY(-1) translateX(0); }
         10%  { transform: scaleY(-1) translateX(-6px); }
@@ -138,7 +155,7 @@
         100% { transform: scaleY(-1) translateX(0); }
       }
     </style>
-    <!-- SEKTION: Flydende fisk -->
+    <!-- Floating fish -->
     <img class="float-fish" id="flydefisk1" src="images/flydefisk01.png" alt="Flydefisk 1">
     <img class="float-fish" id="flydefisk2" src="images/flydefisk02.png" alt="Flydefisk 2">
     <img class="float-fish" id="flydefisk3" src="images/flydefisk01.png" alt="Flydefisk 3">
@@ -146,7 +163,6 @@
     <img class="float-fish" id="flydefisk5" src="images/flydefisk01.png" alt="Flydefisk 5">
     <img class="float-fish" id="flydefisk6" src="images/flydefisk02.png" alt="Flydefisk 6">
     <style>
-      /* Flydende fisk stil */
       .float-fish {
         position: absolute;
         width: 38px;
@@ -159,5 +175,57 @@
         transition: none;
       }
     </style>
+    <script>
+      function animateFloatFish(fish) {
+        const w = document.documentElement.clientWidth;
+        const h = document.documentElement.clientHeight;
+        function floatOnce() {
+          const startY = Math.random() * (h - 40);
+          const duration = 18000 + Math.random() * 12000;
+          fish.style.top = startY + 'px';
+          fish.style.left = w + 'px';
+          fish.style.transition = 'none';
+          void fish.offsetWidth;
+          setTimeout(() => {
+            fish.style.transition = `left ${duration}ms linear`;
+            fish.style.left = '-60px';
+          }, 20);
+          setTimeout(floatOnce, duration + 4000);
+        }
+        floatOnce();
+      }
+      document.addEventListener('DOMContentLoaded', function() {
+        for (let i = 1; i <= 6; i++) {
+          setTimeout(() => animateFloatFish(document.getElementById('flydefisk' + i)), i * 3000);
+        }
+      });
+    </script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var tale = document.getElementById('havfruetale');
+  var p1 = document.getElementById('tale1');
+  var p2 = document.getElementById('tale2');
+  setTimeout(function() {
+    tale.classList.remove('hidden');
+    var showFirst = false;
+    function switchText() {
+      if (showFirst) {
+        p1.style.display = '';
+        p2.style.display = 'none';
+      } else {
+        p1.style.display = 'none';
+        p2.style.display = '';
+      }
+      showFirst = !showFirst;
+    }
+    // Start with p1 visible, p2 hidden
+    p1.style.display = '';
+    p2.style.display = 'none';
+  setInterval(switchText, 3000);
+  // Show p2 after 3s for the first time
+  setTimeout(switchText, 3000);
+  }, 1800); // match the floatInLeft animation duration
+});
+</script>
 </body>
 </html>

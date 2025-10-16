@@ -3,36 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alle fisk</title>
+    <title>allefisk</title>
 
     <link rel="stylesheet" href="css/style.css">
-    <style>
-      @import url('https://fonts.googleapis.com/css2?family=Cherry+Bomb+One&display=swap');
-    </style>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Cherry+Bomb+One&display=swap');
+  </style>
 </head>
 <body style="background-image: url('images/Baggrund.png'); background-size: cover;">
 
-    <!-- SEKTION: Navigation og fiskebilleder -->
-    <!-- Klik på en fisk for at se mere information -->
+
+
+
     <a href="anthias.html" class="fish-link"><img class="fish" id="anthias" src="images/anthias.png" alt="Anthias"></a>
     <a href="dvaergkejser.html" class="fish-link"><img class="fish" id="dvaergkejser" src="images/dvaergkejser.png" alt="Dværgkejser"></a>
     <a href="ildhale.html" class="fish-link"><img class="fish" id="ildhale" src="images/ildhale.png" alt="Ildhale"></a>
     <a href="nemo.html" class="fish-link"><img class="fish" id="nemo" src="images/nemo.png" alt="Nemo"></a>
     <a href="palet.html" class="fish-link"><img class="fish" id="palet" src="images/palet.png" alt="Palet"></a>
     <a href="sejlfinnet.html" class="fish-link"><img class="fish" id="sejlfinnet" src="images/sejlfinnet.png" alt="Sejlfinnet"></a>
-
-    <!-- SEKTION: Bobler og flydende fisk -->
-    <img class="bubble" src="images/floatbobbler.png" alt="Bobler">
+    <img class="bubble" src="images/floatbobbler.png" alt="Bubbles">
     <img class="float-fish" id="flydefisk1" src="images/flydefisk01.png" alt="Flydefisk 1">
     <img class="float-fish" id="flydefisk2" src="images/flydefisk02.png" alt="Flydefisk 2">
     <img class="float-fish" id="flydefisk3" src="images/flydefisk01.png" alt="Flydefisk 3">
     <img class="float-fish" id="flydefisk4" src="images/flydefisk02.png" alt="Flydefisk 4">
     <img class="float-fish" id="flydefisk5" src="images/flydefisk01.png" alt="Flydefisk 5">
     <img class="float-fish" id="flydefisk6" src="images/flydefisk02.png" alt="Flydefisk 6">
+    <img src="images/Krappe.gif" alt="Krappe" style="position: fixed; right: 160px; bottom: 50px; width: 100px; z-index: 50; pointer-events: none;">
 
-    <!-- SEKTION: CSS til fisk, bobler og flydende fisk -->
+
     <style>
-      /* Fiskestil */
       .fish {
         position: absolute;
         width: 100px;
@@ -45,7 +44,6 @@
         left: 120vw !important;
         opacity: 0.2;
       }
-      /* Boble-stil */
       .bubble {
         position: absolute;
         left: 0;
@@ -59,7 +57,6 @@
         transform: scaleY(-1);
         animation: bubbleWobble 4.5s infinite ease-in-out;
       }
-      /* Små fisk der svømmer på tværs */
       .small-fish {
         position: absolute;
         width: 60px;
@@ -77,7 +74,6 @@
         animation-duration: 18s;
         transform: scaleX(-1);
       }
-      /* Flydende fisk */
       .float-fish {
         position: absolute;
         width: 38px;
@@ -89,7 +85,6 @@
         pointer-events: none;
         transition: none;
       }
-      /* Boble-animation */
       @keyframes bubbleWobble {
         0%   { transform: scaleY(-1) translateX(0); }
         10%  { transform: scaleY(-1) translateX(-6px); }
@@ -103,7 +98,6 @@
         90%  { transform: scaleY(-1) translateX(-3px); }
         100% { transform: scaleY(-1) translateX(0); }
       }
-      /* Lille fisk svømmer-animation */
       @keyframes swimAcross {
         0% {
           left: -80px;
@@ -258,36 +252,49 @@
     </div>
     <style>
       #leftButtonWrapper {
-      position: fixed;
-      left: 40px;
-      top: 50%;
-      transform: translateY(-50%);
-      z-index: 20;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    .bubble-arrow {
-      background: none;
-      border: none;
-      cursor: pointer;
-      outline: none;
-      padding: 10px;
-      border-radius: 50%;
-      transition: transform 0.3s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 10px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    }
-    .bubble-arrow:hover {
-      transform: translateY(-2px);
-    }
-    .bubble-arrow:active {
-      transform: translateY(1px);
-    }
+        position: fixed;
+        left: 40px;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 20;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .bubble-arrow {
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        width: 60px;
+        height: 60px;
+        margin-left: 1.5rem;
+        border-radius: 50%;
+        background: radial-gradient(circle at 30% 30%, #b3eaff 70%, #6CC8E1 100%);
+        box-shadow: 0 4px 16px rgba(108,200,225,0.25), 0 1px 4px #285C6E33;
+        border: 2px solid #6CC8E1;
+        cursor: pointer;
+        transition: box-shadow 0.2s, transform 0.2s;
+        position: relative;
+        animation: bubbleWobble 4s infinite ease-in-out;
+        animation-delay: 0.8s;
+      }
+      .bubble-arrow:hover {
+        box-shadow: 0 8px 24px rgba(108,200,225,0.35), 0 2px 8px #285C6E33;
+        transform: scale(1.08);
+      }
+      .bubble-arrow svg {
+        width: 28px;
+        height: 28px;
+        fill: #285C6E;
+      }
     </style>
+</div>
+<div style="position: fixed; top: 20px; left: 20px; z-index: 100;">
+  <a href="start.html">
+    <button class="bubble-arrow" aria-label="Home">
+      <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+    </button>
+  </a>
 </div>
 </body>
 </html>
