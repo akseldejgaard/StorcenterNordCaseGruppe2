@@ -1,8 +1,10 @@
 # StorcenterNordCaseGruppe2
 
-I denne README kommer et kort skriv om arbejdsfordelingen i programmeringsprocessen.
+I denne README står arbejdsfordelingen i programmerinngprocessen.
 
-Vi har sørget for, at alle taget del og har programmeret en større eller mindre del. 
+Vi har sørget for at vi alle fire at taget del i processen, og fordelingen lyder som følgende:
 
-Her er fordelingen: 
-  Bene
+  Benedicte har programmeret dvaergkejser.html 
+  Frederikke har programmeret nemo.html
+  Nanna har programmeret ildhale.html og sejlfinnet.html
+  Aksel har programmeret det resterende
