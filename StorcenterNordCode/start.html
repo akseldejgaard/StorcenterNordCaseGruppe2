@@ -1,0 +1,97 @@
+
+<!-- SEKTION: Hoved (Head) -->
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Start</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* SEKTION: Font og baggrund */
+    @import url('https://fonts.googleapis.com/css2?family=Cherry+Bomb+One&display=swap');
+    body {
+      background-image: url('images/Baggrund.png');
+      background-size: cover;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      width: 100vw;
+      height: 100vh;
+    }
+    /* SEKTION: Knap og animation */
+    @keyframes floatOutRight {
+      to {
+        transform: translateX(120vw);
+        opacity: 0;
+      }
+    }
+    .header-flex.float-out {
+      animation: floatOutRight 1s cubic-bezier(.68,-0.55,.27,1.55) forwards;
+    }
+    .bubble-arrow {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      width: 60px;
+      height: 60px;
+      margin-left: 1.5rem;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, #b3eaff 70%, #6CC8E1 100%);
+      box-shadow: 0 4px 16px rgba(108,200,225,0.25), 0 1px 4px #285C6E33;
+      border: 2px solid #6CC8E1;
+      cursor: pointer;
+      transition: box-shadow 0.2s, transform 0.2s;
+      position: relative;
+      animation: bubbleWobble 4s infinite ease-in-out;
+      animation-delay: 0.8s;
+    }
+    .bubble-arrow:hover {
+      box-shadow: 0 8px 24px rgba(108,200,225,0.35), 0 2px 8px #285C6E33;
+      transform: scale(1.08);
+    }
+    .bubble-arrow svg {
+      width: 28px;
+      height: 28px;
+      fill: #285C6E;
+    }
+  </style>
+</head>
+
+<!-- SEKTION: Krop (Body) -->
+<body>
+  <!-- Krappe billede -->
+  <img src="images/Krappe.gif" alt="Krappe" style="position: fixed; right: 160px; bottom: 50px; width: 100px; z-index: 50; pointer-events: none;">
+
+  <!-- Baggrundsmusik - starter automatisk -->
+  <audio id="bg-music" src="soundeffect/baggrundsmusik.mp3" autoplay loop></audio>
+
+  <!-- SEKTION: Velkomst og knap -->
+  <div class="header-flex">
+    <h1>Velkommen til akvariet</h1>
+    <a href="havfrue.html">
+      <button class="bubble-arrow" aria-label="Næste">
+        <svg viewBox="0 0 24 24"><path d="M8 5l8 7-8 7"/></svg>
+      </button>
+    </a>
+  </div>
+
+  <!-- SEKTION: Script -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var arrowBtn = document.querySelector('.bubble-arrow');
+      var headerFlex = document.querySelector('.header-flex');
+      if (arrowBtn && headerFlex) {
+        arrowBtn.addEventListener('click', function(e) {
+          headerFlex.classList.add('float-out');
+          // Forsinker navigeringen for at matche animationens varighed
+          setTimeout(function() {
+            window.location.href = 'havfrue.html';
+          }, 900);
+          e.preventDefault();
+        });
+      }
+    });
+  </script>
+</body>
+</html>
